@@ -2,6 +2,7 @@ import os
 import logging
 import traceback
 import copy
+import sys
 
 
 class PluginRegistry(object):
@@ -72,8 +73,9 @@ class PluginRegistry(object):
         for p in self.list():
             self.EnablePlugin(p)
 
-    def LoadPlugins(self):
-        d = os.path.dirname(os.path.abspath(__file__))
+    def LoadPlugins(self, path):
+        sys.path.append(path)
+        d = os.path.dirname(path)
         d = os.path.join(d, "Plugins")
         plugin_path = os.path.abspath(d)
         dirlist = os.listdir(plugin_path)

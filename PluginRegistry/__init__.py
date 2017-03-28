@@ -24,7 +24,8 @@ class PluginRegistry(object):
 
         logging.info("Registering plugin: " + plugin)
         try:
-            module = __import__(plugin, globals(), locals(), [], 0)
+            module = __import__("Plugins." + plugin, globals(), locals(), [], 0)
+            module = getattr(module, plugin)
         except Exception as e:
             logging.warning("Nonexistent plugin module in Plugins/%s.py" % plugin)
             logging.debug(e.message)
@@ -59,7 +60,7 @@ class PluginRegistry(object):
                 return
 
         try:
-            self.__plugins[plugin_class_name] = plugin
+            self.__plugins[plugin_class_name] = plugin_class
             logging.info("Plugin registered " + plugin_class_name)
         except Exception as e:
             logging.warning("Failed to register Plugin: " + plugin_class_name)

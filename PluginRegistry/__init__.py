@@ -1,7 +1,7 @@
 import os
 import logging
 import traceback
-import copy
+from copy import copy
 import sys
 
 

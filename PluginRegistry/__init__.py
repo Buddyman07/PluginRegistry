@@ -70,9 +70,9 @@ class PluginRegistry(object):
     def list(self):
         return copy(self.__plugins.keys())
 
-    def InitialisePlugins(self, **params):
+    def InitialisePlugins(self, params=None):
         for p in self.list():
-            self.EnablePlugin(p)
+            self.EnablePlugin(p, params)
 
     def LoadPlugins(self, path):
         sys.path.append(path)
@@ -90,8 +90,8 @@ class PluginRegistry(object):
             plugin = i.replace(".py", "")
             self.__registerPlugin(plugin)
 
-    def EnablePlugin(self, plugin, **params):
-        self.__enabled[plugin] = self.__plugins[plugin](**params)
+    def EnablePlugin(self, plugin, params=None):
+        self.__enabled[plugin] = self.__plugins[plugin](params)
 
     def DisablePlugin(self, plugin):
         if plugin in self.__enabled.keys():

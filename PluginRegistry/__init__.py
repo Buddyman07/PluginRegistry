@@ -22,14 +22,18 @@ class PluginRegistry(object):
             return self.__plugins[plugin_name]
         return None
 
-    def __registerPlugin(self, plugin):
+    def __registerPlugin(self, plugin, prefix=""):
         if type(plugin) != str:
             logging.warning("Plugin must be a named string that exists in the Plugins directory")
             return
 
         logging.info("Registering plugin: " + plugin)
+
+        if len(prefix) > 0 and not prefix.endswith('.'):
+            prefix = prefix + '.'
+
         try:
-            module = __import__("Plugins." + plugin, globals(), locals(), [], 0)
+            module = __import__(prefix + "Plugins." + plugin, globals(), locals(), [], 0)
             module = getattr(module, plugin)
         except Exception as e:
             logging.warning("Nonexistent plugin module in Plugins/%s.py" % plugin)
@@ -79,7 +83,7 @@ class PluginRegistry(object):
         for p in self.list():
             self.EnablePlugin(p, params)
 
-    def LoadPlugins(self, path):
+    def LoadPlugins(self, path, prefix=""):
         sys.path.append(path)
         d = os.path.dirname(path)
         d = os.path.join(d, "Plugins")
@@ -93,7 +97,7 @@ class PluginRegistry(object):
             if not i.endswith("py"):
                 continue
             plugin = i.replace(".py", "")
-            self.__registerPlugin(plugin)
+            self.__registerPlugin(plugin, prefix)
 
     def EnablePlugin(self, plugin, params=None):
         self.__enabled[plugin] = self.__plugins[plugin](params)

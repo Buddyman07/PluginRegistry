@@ -17,6 +17,11 @@ class PluginRegistry(object):
             return self.__enabled[plugin_name]
         return None
 
+    def pluginClass(self, plugin_name):
+        if plugin_name in self.__plugins.keys():
+            return self.__plugins[plugin_name]
+        return None
+
     def __registerPlugin(self, plugin):
         if type(plugin) != str:
             logging.warning("Plugin must be a named string that exists in the Plugins directory")

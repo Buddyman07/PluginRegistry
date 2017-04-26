@@ -3,6 +3,7 @@ import logging
 import traceback
 from copy import copy
 import sys
+import importlib
 
 
 class PluginRegistry(object):
@@ -33,8 +34,7 @@ class PluginRegistry(object):
             prefix = prefix + '.'
 
         try:
-            module = __import__(prefix + "Plugins." + plugin, globals(), locals(), [], 0)
-            module = getattr(module, plugin)
+            module = importlib.import_module(prefix + "Plugins." + plugin)
         except Exception as e:
             logging.warning("Nonexistent plugin module in Plugins/%s.py" % plugin)
             logging.debug(e.message)

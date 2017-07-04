@@ -54,7 +54,12 @@ class PluginRegistry(object):
             return
 
         registryVersion = self.__registry_version.split(".")
-        moduleVersion = module.__plugin_version__.split(".")
+
+        try:
+            moduleVersion = module.__plugin_version__.split(".")
+        except:
+            logging.warning("Cannot find plugin version for: " + plugin_class_name)
+            return
 
         if moduleVersion[0] != registryVersion[0]:
             logging.warning("Module major version mismatch in Plugin: " + plugin_class_name)
@@ -100,8 +105,11 @@ class PluginRegistry(object):
             self.__registerPlugin(plugin, prefix)
 
     def EnablePlugin(self, plugin, params=None):
-        self.__enabled[plugin] = self.__plugins[plugin](params)
-
+        try:
+            self.__enabled[plugin] = self.__plugins[plugin](**params)
+        except:
+            logging.debug(plugin)
+            logging.exception("Loading plugin failed")
     def DisablePlugin(self, plugin):
         if plugin in self.__enabled.keys():
             del(self.__enabled[plugin])

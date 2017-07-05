@@ -23,7 +23,7 @@ class PluginRegistry(object):
             return self.__plugins[plugin_name]
         return None
 
-    def _registerPlugin(self, plugin, prefix=""):
+    def RegisterPlugin(self, plugin, prefix=""):
         if type(plugin) != str:
             logging.warning("Plugin must be a named string that exists in the Plugins directory")
             return
@@ -102,7 +102,7 @@ class PluginRegistry(object):
             if not i.endswith("py"):
                 continue
             plugin = i.replace(".py", "")
-            self.__registerPlugin(plugin, prefix)
+            self.RegisterPlugin(plugin, prefix)
 
     def EnablePlugin(self, plugin, params=None):
         try:

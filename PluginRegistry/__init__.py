@@ -23,7 +23,7 @@ class PluginRegistry(object):
             return self.__plugins[plugin_name]
         return None
 
-    def __registerPlugin(self, plugin, prefix=""):
+    def _registerPlugin(self, plugin, prefix=""):
         if type(plugin) != str:
             logging.warning("Plugin must be a named string that exists in the Plugins directory")
             return
@@ -110,6 +110,7 @@ class PluginRegistry(object):
         except:
             logging.debug(plugin)
             logging.exception("Loading plugin failed")
+
     def DisablePlugin(self, plugin):
         if plugin in self.__enabled.keys():
             del(self.__enabled[plugin])

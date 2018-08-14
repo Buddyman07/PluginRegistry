@@ -36,9 +36,7 @@ class PluginRegistry(object):
         try:
             module = importlib.import_module(prefix + "Plugins." + plugin)
         except Exception as e:
-            logging.warning("Nonexistent plugin module in Plugins/%s.py" % plugin)
-            logging.debug(e.message)
-            traceback.print_exc()
+            logging.exception("Nonexistent plugin module in Plugins/%s.py" % plugin)
             return
 
         try:
@@ -77,12 +75,10 @@ class PluginRegistry(object):
             self.__plugins[plugin_class_name] = plugin_class
             logging.info("Plugin registered " + plugin_class_name)
         except Exception as e:
-            logging.warning("Failed to register Plugin: " + plugin_class_name)
-            traceback.print_exc()
-            logging.warning(str(e))
+            logging.exception("Failed to register Plugin: " + plugin_class_name)
 
     def list(self):
-        return copy(self.__plugins.keys())
+        return copy(list(self.__plugins.keys()))
 
     def InitialisePlugins(self, params=None):
         for p in self.list():
